@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <style>
+        img {
+        max-width: 400px;
+        }
+        form {
+  width: 300px;
+  margin: 0 auto;
+  text-align: center;
+  padding-top: 50px;
+}
+
+.value-button {
+  display: inline-block;
+  border: 1px solid #ddd;
+  margin: 0px;
+  width: 40px;
+  height: 20px;
+  text-align: center;
+  vertical-align: middle;
+  padding: 11px 0;
+  background: #eee;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.value-button:hover {
+  cursor: pointer;
+}
+
+form #decrease {
+  margin-right: -4px;
+  border-radius: 8px 0 0 8px;
+}
+
+form #increase {
+  margin-left: -4px;
+  border-radius: 0 8px 8px 0;
+}
+
+form #input-wrap {
+  margin: 0px;
+  padding: 0px;
+}
+
+input#number {
+  text-align: center;
+  border: none;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  margin: 0px;
+  width: 40px;
+  height: 40px;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+        .dang-nhap {
+        float: right;
+        }
+        .myheader {
+         background-color:  #201e52;
+          padding-bottom: 18px;
+        }
+        hr {
+            border: 3px solid #201e52;
+            box-shadow: 0 4px 2px -2px #201e52;
+        }
+        .mybody {
+        background-color: #de844b;
+        }
+.search-input {
+            width: 300px;
+            margin-right: 12px;
+            background-color: rgb(203, 207, 243);
+            color: black;
+            border-color: rgba(255, 255, 255, 0.5);
+
+        }
+        .product-catogery {
+            width: 200px;
+            background-color: rgb(203, 207, 243);
+
+        }
+
+
+    </style>
+    <!--    <script th:inline="javascript">-->
+    <!--        function redirectToPage() {-->
+    <!--            var selectedValue = document.getElementById('mySelect').value;-->
+
+    <!--            window.location.href = /*[[@{/your-target-page/{selectedValue}(selectedValue=${selectedValue})}]]*/ '';-->
+    <!--        }-->
+    <!--    </script>-->
+    <script>
+        function increaseValue() {
+          var value = parseInt(document.getElementById('number').value, 10);
+          value = isNaN(value) ? 0 : value;
+          value++;
+          document.getElementById('number').value = value;
+        }
+
+        function decreaseValue() {
+          var value = parseInt(document.getElementById('number').value, 10);
+          value = isNaN(value) ? 0 : value;
+          value < 1 ? value = 1 : '';
+          value--;
+          document.getElementById('number').value = value;
+        }
+        function redirectToPage() {
+            var selectedValue = document.getElementById('mySelect').value;
+            if (selectedValue === '1') {
+                window.location.href = '/products/sach';
+            } else if (selectedValue === '2') {
+                window.location.href = '/products/do-dien-tu';
+            } else if (selectedValue === '3') {
+                window.location.href = '/products/thoi-trang';
+            }else if (selectedValue === '4') {
+                window.location.href = '/products/khac';
+            }else if (selectedValue === '0') {
+                window.location.href = '/products';
+            }
+
+        }
+    </script>
+</head>
+<body class="container mybody">
+<div class ="row myheader" >
+    <div class ="col-sm-6">
+        <a class="btn btn-dark mb-3 mt-2" th:href="@{/products}"><h1> SHOP-X</h1></a>
+        <select class="form-control product-catogery" id="mySelect" onchange="redirectToPage()">
+            <option value="" selected disabled>Danh mục sản phẩm</option>
+            <option value="0">Tất cả</option>
+            <option value="1">Sách</option>
+            <option value="2">Đồ điện tử</option>
+            <option value="3">Thời trang</option>
+            <option value="4">Khác</option>
+        </select>
+    </div>
+    <div class="col-sm-6">
+        <a class="btn btn-primary mt-3 dang-nhap" th:href="@{/showLoginPage}">Đăng nhập</a>
+    </div>
+</div>
+<hr/>
+<div class="container">
+    <div class="intro-section">
+    </div>
+    <!-- ô searchbox và ô combobox -->
+
+    <!-- ô searchbox và ô combobox -->
+
+
+    <div class="row">
+        <div class="col-md-4 mt-5">
+            <div class="search-box">
+                <form th:action="@{/products/search}" method="post">
+                    <input id="keyword" name="keyword" type="text" class="form-control search-input mb-2" placeholder="Tìm sản phẩm">
+                    <button type="submit">Search</button>
+                </form>
+                <form th:action="@{/products/searchId}" method="post">
+                    <input id="keyid" name="keyid" type="number" class="form-control search-input mb-2" placeholder="Tìm sản phẩm theo ID" required>
+                    <button type="submit">Search</button>
+                </form>
+
+            </div>
+        </div>
+        <div class="col-md-4 product-img">
+            <img th:src="${product.image}"
+                 alt="Product Image" class="product-image">
+        </div>
+
+
+        <div class="col-md-4">
+            <div class="product-details">
+            <h2>Thông tin chi tiết sản phẩm</h2>
+                <h5>ID sản phẩm :</h5>
+                <p th:text="${product.id}"></p>
+                <h5>Tên sản phẩm :</h5>
+                <p th:text="${product.name}"></p>
+                <h5>Nhóm sản phẩm :</h5>
+                <p th:text="${product.tag}"></p>
+            <h5>Mô tả :</h5>
+                <p th:text="${product.describe}"></p>
+            <p>Giá: <span th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')}"></span> vnd</p>
+            <div class="product-actions">
+                <a class="btn btn-success btn1" th:href="@{/showLoginPage}" onclick="return confirm('Bạn cần đăng nhập để có thể thêm vào giỏ hàng');">Thêm vào rỏ hàng</a>
+            </div>
+
+                <form>
+                    <h5>Số lượng : </h5>
+                    <div class="value-button" id="decrease" onclick="decreaseValue()" value="Decrease Value">-</div>
+                    <input type="number" id="number" value="0" />
+                    <div class="value-button" id="increase" onclick="increaseValue()" value="Increase Value">+</div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+<!--    Phân trang-->
+<!--<div class="centered-div-father">-->
+<!--    <nav aria-label="Page navigation" class="centered-div">-->
+<!--        <ul class="pagination">-->
+<!--            <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">-->
+<!--                <a class="page-link" th:href="@{/products(page=0)}">First</a>-->
+<!--            </li>-->
+<!--            <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">-->
+<!--                <a class="page-link" th:href="@{/products(page=${currentPage - 1})}">Previous</a>-->
+<!--            </li>-->
+<!--            <li class="page-item" th:each="i : ${#numbers.sequence(0, products.totalPages - 1)}"-->
+<!--                th:classappend="${currentPage == i ? 'active' : ''}">-->
+<!--                <a class="page-link" th:href="@{/products(page=${i})}" th:text="${i + 1}"></a>-->
+<!--            </li>-->
+<!--            <li class="page-item" th:classappend="${currentPage == products.totalPages - 1 ? 'disabled' : ''}">-->
+<!--                <a class="page-link" th:href="@{/products(page=${currentPage + 1})}">Next</a>-->
+<!--            </li>-->
+<!--            <li class="page-item" th:classappend="${currentPage == products.totalPages - 1 ? 'disabled' : ''}">-->
+<!--                <a class="page-link" th:href="@{/products(page=${products.totalPages - 1})}">Last</a>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </nav>-->
+<!--</div>-->
+
+
+
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <style>
+
+        .container {}
+
+        .intro-section {
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+
+        }
+
+        .search-input {
+            width: 300px;
+            margin-right: 12px;
+            background-color: rgb(203, 207, 243);
+            color: black;
+            border-color: rgba(255, 255, 255, 0.5);
+
+        }
+
+        .product-catogery {
+            width: 200px;
+            background-color: rgb(203, 207, 243);
+
+        }
+
+        .form-control {}
+
+        .product-item {
+            background-color: rgb(19, 23, 42);
+            border: 1px solid rgb(35, 39, 61);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .product-image {
+            width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+            border-radius: 20px;
+        }
+
+        .product-name {
+            color: white;
+
+        }
+
+        .product-description {
+            color: rgb(173, 178, 203);
+        }
+
+        .product-warranty {
+            color: rgb(242, 126, 212);
+        }
+
+        .product-price {
+            color: white;
+        }
+
+        .product-action {
+            display: flex;
+            justify-content: center;
+            padding-bottom: 12px;
+
+        }
+
+        .btn1 {
+            margin-left: 10px;
+        }
+        .centered-div-father{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50vh;
+            margin: 0;
+        }
+        .centered-div {
+            text-align: center;
+            padding: 30px;
+            border: 1px solid #ccc;
+        }
+        .myname {
+        float: right;
+
+        }
+        .myheader {
+         background-color:  #201e52;
+          padding-bottom: 18px;
+        }
+        hr {
+            border: 3px solid #201e52;
+            box-shadow: 0 4px 2px -2px #201e52;
+        }
+        .mybody {
+        background-color: #de844b;
+        }
+        .mydiv {
+        padding : 20px 40px;
+
+        }
+
+
+    </style>
+
+    <script>
+        function redirectToPage() {
+            var selectedValue = document.getElementById('mySelect').value;
+            if (selectedValue === '1') {
+                window.location.href = '/home/sach';
+            } else if (selectedValue === '2') {
+                window.location.href = '/home/do-dien-tu';
+            } else if (selectedValue === '3') {
+                window.location.href = '/home/thoi-trang';
+            }else if (selectedValue === '4') {
+                window.location.href = '/home/khac';
+            }else if (selectedValue === '0') {
+                window.location.href = '/home';
+            }
+
+        }
+    </script>
+</head>
+<body class="container mybody">
+<div class ="row myheader" >
+    <div class ="col-sm-6">
+        <a class="btn btn-dark mb-3 mt-2" th:href="@{/home}"><h1> SHOP-X</h1></a>
+        <select class="form-control product-catogery" id="mySelect" onchange="redirectToPage()">
+            <option value="" selected disabled>Danh mục sản phẩm</option>
+            <option value="0">Tất cả</option>
+            <option value="1">Sách</option>
+            <option value="2">Đồ điện tử</option>
+            <option value="3">Thời trang</option>
+            <option value="4">Khác</option>
+        </select>
+    </div>
+    <div class="col-sm-6 myname">
+        <h3 style="color:white"><b> Xin chào, <span sec:authentication="principal.username"></span></b></h3>,
+
+
+        <form action="#" th:action="@{/logout}" method="POST">
+            <input type="submit" class="btn btn-info" value="Đăng xuất"/>
+        </form>
+        <div class="row">
+            <a sec:authorize="hasRole('USER')" class="col-lg-3 btn btn-warning mt-3" th:href="@{/cart/show}">Giỏ hàng</a>
+            <a sec:authorize="hasRole('USER')" class="col-lg-3 btn btn-dark mt-3" th:href="@{/cart/history}">Lịch sử mua hàng</a>
+            <a sec:authorize="hasRole('USER')" class="col-lg-3 btn btn-primary mt-3" th:href="@{/home/info}">Thông tin cá nhân</a>
+            <a sec:authorize="hasRole('ADMIN')" class="col-lg-3 btn btn-dark mt-3" th:href="@{/admin/bill}">Quản lý hóa đơn</a>
+            <a sec:authorize="hasRole('ADMIN')" class="col-lg-3 btn btn-warning mt-3" th:href="@{/home/info}">Thông tin cá nhân</a>
+        </div>
+
+    </div>
+</div>
+<hr/>
+<div class="container">
+    <h1 class="btn btn-success mydiv" style="font-size: 30px">HÓA ĐƠN</h1>
+    <table class="table table-bordered table-dark">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">ID sản phẩm</th>
+            <th scope="col">Tên</th>
+            <th scope="col">Giá</th>
+            <th scope="col">Số lượng</th>
+            <th scope="col">Tất cả</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="cart : ${carts}">
+            <th scope="row">#</th>
+            <td th:text="${cart.idProduct}">ID sản phẩm</td>
+            <td th:text="${cart.name}">Tên sản phẩm</td>
+            <td th:text="${#numbers.formatDecimal(cart.price, 0, 'COMMA', 2, 'POINT')}">Giá sản phẩm</td>
+            <td th:text="${cart.quatity}">Số lượng</td>
+            <td th:text="${#numbers.formatDecimal(cart.total, 0, 'COMMA', 2, 'POINT')}">Tổng giá</td>
+        </tr>
+        <tr>
+            <td colspan="6" >count = <span th:text="${dem}"></span></td>
+        </tr>
+        <tr>
+            <!--            <th scope="row">$</th>-->
+            <td colspan="5">TỔNG THANH TOÁN</td>
+            <td  th:text="${#numbers.formatDecimal(totalPrice, 0, 'COMMA', 2, 'POINT')}" style="color:red">Tổng thanh toán</td>
+        </tr>
+
+        </tbody>
+    </table>
+</div>
+
+
+<h2>Tổng giá: <span th:text="${#numbers.formatDecimal(totalPrice, 0, 'COMMA', 2, 'POINT')}">?</span></h2>
+
+<div class="row">
+    <div class="col-lg-6 col-md-6">
+<form action="#" th:action="@{/cart/pay/confirm}" th:object="${bill}" method="POST">
+    <label for="username">Tên người dùng: </label>
+    <input th:readonly="true" th:placeholder="${userName}" id="username" class="form-control w-75 mb-4">
+    <label for="name">Tên người nhận: </label>
+    <input type="text" th:field="*{receiveName}" placeholder="Nhập tên người nhận: " id="name" class="form-control w-75 mb-4" required>
+    <label for="contact">Nhập số diện thoại hoặc email giao hàng: </label>
+    <input type="text" th:field="*{contact}" placeholder="Nhập số diện thoại hoặc email giao hàng: " id="contact" class="form-control w-75 mb-4" required>
+    <label for="address">Địa chỉ giao hàng: </label>
+<!--    <input type="text" th:field="*{address}" placeholder="Nhập địa chỉ giao hàng: " id="address" class="form-control w-75 mb-4">-->
+    <textarea id="address" type="text" rows="4" cols="50" th:field="*{address}" class="form-control w-75 mb-4" placeholder="Địa chỉ" required></textarea>
+
+    <label for="note">Ghi chú: </label>
+<!--    <input type="text" th:field="*{note}" placeholder="Nhập ghi chứ: " id="note" class="form-control w-75 mb-4">-->
+    <textarea id="note" type="text" rows="4" cols="50" th:field="*{note}" class="form-control w-75 mb-4" placeholder="Ghi chú"></textarea>
+
+<!--    <input type="hidden" th:field="*{id}">-->
+<!--    <input type="text" th:field="*{lastName}" placeholder="Nhập họ" class="form-control w-25 mb-4">-->
+<!--    <input type="text" th:field="*{firtName}" placeholder="Nhập tên" class="form-control w-25 mb-4">-->
+<!--    <input type="email" th:field="*{email}" placeholder="Nhập email" class="form-control w-25 mb-4">-->
+    <button type="submit" class="btn btn-success col-2" onclick="return confirm('Hãy chắc chắn rằng bạn đã kiểm tra kỹ đơn hàng!');">Xác nhận</button>
+</form>
+    </div>
+    <div class="col-lg-6 col-md-6">
+<a sec:authorize="hasRole('USER')" class="btn btn-info mt-3" th:href="@{/home}">Tiếp tục mua sắm</a>
+<a sec:authorize="hasRole('USER')" class="btn btn-warning mt-3" th:href="@{/cart/show}">Quay lại giỏ hàng</a>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+</body>
+</html>
